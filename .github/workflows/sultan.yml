@@ -121,6 +121,7 @@ jobs:
           echo "Changing to configuration directory: $CONFIG..."
           cd "$CONFIG"
           echo "Patching Re:Kernel..."
+          mkdir rekernel
           cp ../Re-Kernel/Integrate/rekernel/* ./rekernel/
           cp ../Re-Kernel/Integrate/patches.sh ./
           bash ./patches.sh
