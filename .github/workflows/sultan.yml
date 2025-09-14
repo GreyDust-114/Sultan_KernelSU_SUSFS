@@ -117,7 +117,7 @@ jobs:
 
       - name: Clone & Apply Re:Kernel Patch
         run: |
-          git clone --depth=1 https://github.com/Sakion-Team/Re-Kernel.git Re-Kernel
+          git clone --depth=1 https://github.com/Sakion-Team/Re-Kernel.git
           cd "$CONFIG"
           bash ../Re-Kernel/tree/main/Integrate/rekernel_patch.sh
 
