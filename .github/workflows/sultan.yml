@@ -71,6 +71,7 @@ jobs:
           git clone https://github.com/TheWildJames/AnyKernel3.git -b "$ANYKERNEL_BRANCH"
           git clone https://gitlab.com/simonpunk/susfs4ksu.git -b "$SUSFS_BRANCH"
           git clone https://github.com/TheWildJames/kernel_patches.git
+          git clone https://github.com/Sakion-Team/Re-Kernel.git
           git clone https://github.com/kerneltoast/${{ inputs.repo }}
       
       - name: Add KernelSU
@@ -115,10 +116,13 @@ jobs:
           cp ../kernel_patches/sultan/sys.c_fix.patch ./
           patch -p1 --fuzz=3 < sys.c_fix.patch
 
-      - name: Clone & Apply Re:Kernel Patch
+      - name: Apply Re:Kernel Patch
         run: |
-          git clone --depth=1 https://github.com/Sakion-Team/Re-Kernel.git
+          echo "Changing to configuration directory: $CONFIG..."
           cd "$CONFIG"
+          echo "Patching RE:Kernel..."
+          cp ../Re-Kernel/tree/main/Integrate/rekernel ./
+          cp ../Re-Kernel/tree/main/Integrate/rekernel_patch.sh ./
           bash ../Re-Kernel/tree/main/Integrate/rekernel_patch.sh
 
       - name: Apply KSU Hooks
