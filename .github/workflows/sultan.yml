@@ -119,7 +119,7 @@ jobs:
         run: |
           git clone --depth=1 https://github.com/Sakion-Team/Re-Kernel.git Re-Kernel
           cd "$CONFIG"
-          bash ../Re-Kernel/Integrate/rekernel_patch.sh
+          bash ../Re-Kernel/tree/main/Integrate/rekernel_patch.sh
 
       - name: Apply KSU Hooks
         run: |
