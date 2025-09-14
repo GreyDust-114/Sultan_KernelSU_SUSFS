@@ -71,7 +71,7 @@ jobs:
           git clone https://github.com/TheWildJames/AnyKernel3.git -b "$ANYKERNEL_BRANCH"
           git clone https://gitlab.com/simonpunk/susfs4ksu.git -b "$SUSFS_BRANCH"
           git clone https://github.com/TheWildJames/kernel_patches.git
-          git clone https://github.com/Sakion-Team/Re-Kernel.git
+          git clone https://github.com/Sakion-Team/Re-Kernel.git ../Re-Kernel
           git clone https://github.com/kerneltoast/${{ inputs.repo }}
       
       - name: Add KernelSU
@@ -123,7 +123,7 @@ jobs:
           echo "Patching RE:Kernel..."
           cp ../Re-Kernel/Integrate/rekernel ./
           cp ../Re-Kernel/Integrate/patches.sh ./
-          bash ../Re-Kernel/tree/main/Integrate/patches.sh
+          bash ./patches.sh
 
       - name: Apply KSU Hooks
         run: |
