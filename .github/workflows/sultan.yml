@@ -121,9 +121,9 @@ jobs:
           echo "Changing to configuration directory: $CONFIG..."
           cd "$CONFIG"
           echo "Patching RE:Kernel..."
-          cp ../Re-Kernel/tree/main/Integrate/rekernel ./
-          cp ../Re-Kernel/tree/main/Integrate/rekernel_patch.sh ./
-          bash ../Re-Kernel/tree/main/Integrate/rekernel_patch.sh
+          cp ../Re-Kernel/Integrate/rekernel ./
+          cp ../Re-Kernel/Integrate/patches.sh ./
+          bash ../Re-Kernel/tree/main/Integrate/patches.sh
 
       - name: Apply KSU Hooks
         run: |
