@@ -115,15 +115,10 @@ jobs:
           cp ../kernel_patches/sultan/sys.c_fix.patch ./
           patch -p1 --fuzz=3 < sys.c_fix.patch
 
-      - name: Clone Re:Kernel Integrate
+      - name: Clone & Apply Re:Kernel Patch
         run: |
-          git clone --depth=1 https://github.com/Sakion-Team/Re-Kernel.git ../Re-Kernel
-
-      - name: Apply Re:Kernel Patch
-        run: |
-          echo "Changing to configuration directory: $CONFIG..."
+          git clone --depth=1 https://github.com/Sakion-Team/Re-Kernel.git Re-Kernel
           cd "$CONFIG"
-          echo "Applying Re:Kernel patch..."
           bash ../Re-Kernel/Integrate/rekernel_patch.sh
 
       - name: Apply KSU Hooks
