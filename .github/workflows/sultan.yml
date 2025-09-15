@@ -117,15 +117,15 @@ jobs:
           cp ../kernel_patches/sultan/sys.c_fix.patch ./
           patch -p1 --fuzz=3 < sys.c_fix.patch
 
-      - name: Apply Re:Kernel Patch
-        run: |
-          echo "Changing to configuration directory: $CONFIG..."
-          cd "$CONFIG"
-          echo "Patching Re:Kernel..."
-          mkdir rekernel
-          cp ../Re-Kernel/Integrate/rekernel/* ./rekernel/
-          cp ../Re-Kernel/Integrate/patches.sh ./
-          bash ./patches.sh
+      # - name: Apply Re:Kernel Patch
+      #  run: |
+      #    echo "Changing to configuration directory: $CONFIG..."
+      #    cd "$CONFIG"
+      #    echo "Patching Re:Kernel..."
+      #    mkdir rekernel
+      #    cp ../Re-Kernel/Integrate/rekernel/* ./rekernel/
+      #    cp ../Re-Kernel/Integrate/patches.sh ./
+      #    bash ./patches.sh
 
       - name: Apply KSU Hooks
         run: |
