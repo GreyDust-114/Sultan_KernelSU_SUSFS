@@ -37,15 +37,11 @@ jobs:
           verbose: 'true'                # Enable detailed logging
           
 
-      - name: Download and extract GCC 14.2.0 toolchain
+      - name: Download and extract AOSP Clang toolchain
         run: |
-          echo "Downloading GCC 14.2.0 cross-compiler toolchain..."
-          wget https://www.kernel.org/pub/tools/crosstool/files/bin/x86_64/14.2.0/x86_64-gcc-14.2.0-nolibc-aarch64-linux.tar.gz
-          echo "Extracting .gz file..."
-          gunzip x86_64-gcc-14.2.0-nolibc-aarch64-linux.tar.gz
-          echo "Extracting .tar file..."
-          tar -xf x86_64-gcc-14.2.0-nolibc-aarch64-linux.tar
-          echo "GCC 14.2.0 toolchain extracted successfully"
+          echo "Downloading AOSP Clang toolchain..."
+          git clone https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86 clang-toolchain --depth=1
+          echo "AOSP Clang toolchain downloaded successfully"
 
       - name: Set CONFIG Environment Variable
         run: |
@@ -189,6 +185,14 @@ jobs:
           echo "CONFIG_TCP_CONG_WESTWOOD=n" >> ./arch/arm64/configs/${{ inputs.codename }}_defconfig
           echo "CONFIG_TCP_CONG_HTCP=n" >> ./arch/arm64/configs/${{ inputs.codename }}_defconfig
 
+          # Performance optimizations
+          echo "CONFIG_LTO_CLANG_THIN=y" >> ./arch/arm64/configs/${{ inputs.codename }}_defconfig
+          echo "CONFIG_SLUB_DEBUFS=n" >> ./arch/arm64/configs/${{ inputs.codename }}_defconfig
+          echo "CONFIG_PROFILING=n" >> ./arch/arm64/configs/${{ inputs.codename }}_defconfig
+          echo "CONFIG_DEBUG_INFO=n" >> ./arch/arm64/configs/${{ inputs.codename }}_defconfig
+          echo "CONFIG_DEBUG_KERNEL=n" >> ./arch/arm64/configs/${{ inputs.codename }}_defconfig
+          echo "CONFIG_DEBUG_FS=n" >> ./arch/arm64/configs/${{ inputs.codename }}_defconfig
+
       - name: Run sed and perl Commands
         run: |
           echo "Changing to configuration directory: $CONFIG..."
@@ -202,8 +206,12 @@ jobs:
           echo "Changing to configuration directory: $CONFIG..."
           cd "$CONFIG"
           
-          make CROSS_COMPILE=$GITHUB_WORKSPACE/gcc-14.2.0-nolibc/aarch64-linux/bin/aarch64-linux- CC=$GITHUB_WORKSPACE/gcc-14.2.0-nolibc/aarch64-linux/bin/aarch64-linux-gcc -j$(nproc --all) ${{ inputs.codename }}_defconfig
-          make CROSS_COMPILE=$GITHUB_WORKSPACE/gcc-14.2.0-nolibc/aarch64-linux/bin/aarch64-linux- CC=$GITHUB_WORKSPACE/gcc-14.2.0-nolibc/aarch64-linux/bin/aarch64-linux-gcc -j$(nproc --all) all
+          export CLANG_TRIPLE="aarch64-linux-gnu-"
+          export CROSS_COMPILE="aarch64-linux-gnu-"
+          export PATH="$GITHUB_WORKSPACE/clang-toolchain/bin:$PATH"
+          
+          make -j$(nproc --all) O=out CC=clang LD=ld.lld AR=llvm-ar AS=llvm-as NM=llvm-nm OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump STRIP=llvm-strip ${{ inputs.codename }}_defconfig
+          make -j$(nproc --all) O=out CC=clang LD=ld.lld AR=llvm-ar AS=llvm-as NM=llvm-nm OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump STRIP=llvm-strip
 
       - name: Copy Images
         run: |
