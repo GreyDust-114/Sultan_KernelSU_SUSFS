@@ -72,7 +72,8 @@ jobs:
           git clone https://gitlab.com/simonpunk/susfs4ksu.git -b "$SUSFS_BRANCH"
           git clone https://github.com/TheWildJames/kernel_patches.git
           git clone https://github.com/Sakion-Team/Re-Kernel.git
-          git clone https://github.com/kerneltoast/${{ inputs.repo }}
+          # git clone https://github.com/kerneltoast/${{ inputs.repo }}
+          git clone https://github.com/momojuro/${{ inputs.repo }}
       
       - name: Add KernelSU
         run: |
